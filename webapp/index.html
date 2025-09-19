@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>License Plate Detector</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg">
+      <div class="gradient gradient-1"></div>
+      <div class="gradient gradient-2"></div>
+      <div class="gridlines"></div>
+    </div>
+    <div class="container">
+      <header class="nav">
+        <div class="brand">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8.5C3 7.12 4.12 6 5.5 6H18.5C19.88 6 21 7.12 21 8.5V15.5C21 16.88 19.88 18 18.5 18H5.5C4.12 18 3 16.88 3 15.5V8.5Z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 12H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="7" cy="9.5" r=".8" fill="currentColor"/>
+            <circle cx="17" cy="9.5" r=".8" fill="currentColor"/>
+          </svg>
+          <span>Plate Vision</span>
+        </div>
+        <div></div>
+      </header>
+
+      <section class="hero">
+        <h1 class="title">ense Plate Detection</h1>
+        <p class="subtitle">Upload an image and we’ll highlight license plates using your .pt model.</p>
+      </section>
+
+      <section class="cards">
+        <div class="pane uploader">
+          <div id="drop" class="drop">
+            <div class="drop-icon">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 16V4M12 4L7 9M12 4L17 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M20 16V17.5C20 18.88 18.88 20 17.5 20H6.5C5.12 20 4 18.88 4 17.5V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="drop-text"><strong>Drag & Drop</strong> your image here</div>
+            <div class="hint">or click to browse</div>
+            <input id="file" type="file" accept="image/*" style="display:none" />
+          </div>
+          <div class="controls">
+            <button id="btnChoose" class="btn outline">Choose image</button>
+            <button id="btnDetect" class="btn primary">Detect</button>
+          </div>
+          <div class="center"><div id="spinner" class="spinner"></div></div>
+        </div>
+
+        <div class="pane preview">
+          <div class="preview-wrap">
+            <div class="image-container">
+              <div class="image-label">Image Preview</div>
+              <img id="displayImage" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDIwMCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTUwIiBmaWxsPSIjRjNGNUY5Ii8+CjxwYXRoIGQ9Ik04MCA3NUgxMjBNODAgOTVIMTIwTTgwIDExNUgxMjAiIHN0cm9rZT0iI0M3Q0RENyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+" alt="Image preview placeholder" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="toast" class="toast" role="status"></div>
+    </div>
+    <script src="./main.js"></script>
+  </body>
+  </html>
+
+
