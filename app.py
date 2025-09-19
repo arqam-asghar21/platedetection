@@ -1,7 +1,6 @@
 from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from PIL import Image, ExifTags
 import io
 from ultralytics import YOLO
@@ -11,7 +10,7 @@ import cv2
 import base64
 
 
-app = FastAPI(title="ALPR - License Plate Detector")
+app = FastAPI(title="ALPR - License Plate Detector API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,9 +34,6 @@ torch.load = patched_torch_load
 
 model = YOLO("license_plate_detector.pt")
 
-# Mount static web app at /web
-app.mount("/web", StaticFiles(directory="webapp", html=True), name="web")
-
 # Allow very large images (disable PIL DecompressionBomb protection)
 Image.MAX_IMAGE_PIXELS = None
 
@@ -50,8 +46,13 @@ except Exception:
 
 
 @app.get("/")
-def index_redirect():
-    return RedirectResponse(url="/web/")
+def root():
+    return {"message": "License Plate Detection API", "version": "1.0.0", "endpoints": ["/detect"]}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "model_loaded": True}
 
 
 @app.post("/detect")
@@ -130,7 +131,7 @@ async def detect(file: UploadFile = File(...)):
         xb = max(min(w_out, x2 - sx), xa + 1)
         yb = max(min(h_out, y2 - sy), ya + 1)
 
-        # refine to plate-like aspect ratio with fixed 30px minimum height for consistent vertical coverage
+        # refine to plate-like aspect ratio with fixed 50px minimum height for consistent vertical coverage
         plate_ar = 2.5
         cur_w = xb - xa
         cur_h = yb - ya
@@ -158,10 +159,13 @@ async def detect(file: UploadFile = File(...)):
     _, buf = cv2.imencode('.jpg', output)
     img_b64 = base64.b64encode(buf.tobytes()).decode('utf-8')
 
-    return {"image_base64": img_b64}
+    return {
+        "image_base64": img_b64,
+        "detections": len(boxes),
+        "processing_time_ms": round(time_ms, 2),
+        "boxes": boxes
+    }
 
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)
-
-
